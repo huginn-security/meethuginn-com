@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Huginn Security Scanner — Information &amp; Opt-Out</title>
+  <style>
+    :root { --bg: #0f1117; --surface: #1a1d27; --border: #2a2d3a; --text: #e2e4e9; --text2: #9ca3af; --accent: #6366f1; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem; }
+    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.15rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--text); }
+    p, li { font-size: 0.9rem; color: var(--text2); margin-bottom: 0.75rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin: 1rem 0; }
+    .ip-list { list-style: none; padding: 0; }
+    .ip-list li { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem; padding: 0.35rem 0; color: var(--text); }
+    .opt-out-box { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 10px; padding: 1.25rem; margin: 1rem 0; }
+    ul { padding-left: 1.25rem; }
+    code { background: var(--surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85rem; font-family: 'SF Mono', 'Fira Code', monospace; }
+    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text2); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Huginn Security Scanner</h1>
+    <p>If you arrived here because you observed network traffic from one of our IP addresses, this page explains who we are, what we do, and how to opt out.</p>
+
+    <h2>Who We Are</h2>
+    <p><strong>Huginn</strong> is a security intelligence platform that monitors the internet for exposed services, misconfigurations, and vulnerabilities. We operate a distributed sensor network that performs lightweight, non-intrusive scans to build a database of internet-facing infrastructure.</p>
+    <p>Our scanning is similar to services like <a href="https://www.shodan.io" rel="nofollow">Shodan</a>, <a href="https://censys.io" rel="nofollow">Censys</a>, and <a href="https://www.shadowserver.org" rel="nofollow">Shadowserver</a>.</p>
+
+    <h2>What We Scan</h2>
+    <p>Our scanners perform the following activities:</p>
+    <ul>
+      <li><strong>Port discovery</strong> &mdash; TCP SYN probes to identify open ports (no connection is established)</li>
+      <li><strong>Service identification</strong> &mdash; Standard HTTP/HTTPS connections to identify web technologies and TLS certificates</li>
+      <li><strong>DNS enumeration</strong> &mdash; Public DNS record lookups (A, AAAA, MX, TXT, NS, SOA)</li>
+    </ul>
+    <p>We do <strong>not</strong> perform:</p>
+    <ul>
+      <li>Vulnerability exploitation or credential brute-forcing</li>
+      <li>Denial-of-service or high-rate flooding</li>
+      <li>Application-layer attacks or data exfiltration</li>
+      <li>Scanning of opted-out IP ranges</li>
+    </ul>
+
+    <h2>Our Scanner IP Addresses</h2>
+    <div class="card">
+      <p style="font-size:0.8rem;margin-bottom:0.5rem;">These IP addresses are used for authorized scanning. You can whitelist or block them as appropriate for your network.</p>
+      <ul class="ip-list" id="scanner-ips">
+        <li style="color:var(--text2)">Loading...</li>
+      </ul>
+      <p style="font-size:0.75rem;color:var(--text2);margin:0.5rem 0 0;">
+        Machine-readable list: <code>GET /api/v1/scanner-ips</code>
+      </p>
+    </div>
+
+    <h2>Opt Out</h2>
+    <div class="opt-out-box">
+      <p style="color:var(--text);margin-bottom:0.5rem;"><strong>We respect your right to opt out.</strong></p>
+      <p>If you do not wish your IP addresses or networks to be scanned, you can opt out using any of these methods:</p>
+      <ul>
+        <li><strong>API:</strong> Submit a <code>POST</code> request to <code>/api/v1/optout</code> with your CIDR range (see example below)</li>
+        <li><strong>Email:</strong> Send your IP range(s) to <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a></li>
+      </ul>
+      <p>Opt-out requests are processed immediately. Your IP range will be excluded from all future scans.</p>
+    </div>
+
+    <h2>API Opt-Out Example</h2>
+    <div class="card">
+      <code style="display:block;white-space:pre;font-size:0.8rem;line-height:1.7;overflow-x:auto;">curl -X POST https://app.meethuginn.com/api/v1/optout \
+  -H "Content-Type: application/json" \
+  -d '{
+    "cidr": "203.0.113.0/24",
+    "email": "noc@example.com",
+    "organization": "Example Corp",
+    "reason": "Internal network"
+  }'</code>
+    </div>
+
+    <h2>Contact</h2>
+    <p>For questions, concerns, or abuse reports:</p>
+    <ul>
+      <li><strong>Email:</strong> <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a></li>
+      <li><strong>Organization:</strong> Huginn Security Platform</li>
+    </ul>
+
+    <h2>Legal Basis</h2>
+    <p>Our scanning activities consist of standard network probes (TCP SYN packets, HTTP/TLS connections, DNS queries) that do not access, modify, or exfiltrate data from target systems. These activities are equivalent to connecting to a publicly accessible service with a web browser.</p>
+    <p>We comply with applicable laws and promptly honour all opt-out requests. If you believe our scanning has caused an issue, please contact us immediately at <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a>.</p>
+
+    <div class="footer">
+      <p>&copy; 2026 Huginn Security Platform &mdash; <a href="https://meethuginn.com">meethuginn.com</a></p>
+    </div>
+
+  </div>
+
+  <script>
+    // Fetch scanner IPs from the Huginn platform API.
+    // Update PLATFORM_URL to match your deployment.
+    const PLATFORM_URL = 'https://app.meethuginn.com';
+
+    (async function() {
+      try {
+        const resp = await fetch(PLATFORM_URL + '/api/v1/scanner-ips');
+        const data = await resp.json();
+        const list = document.getElementById('scanner-ips');
+        if (data.scanner_ips && data.scanner_ips.length > 0) {
+          list.innerHTML = data.scanner_ips
+            .map(function(ip) { return '<li>' + ip + '</li>'; })
+            .join('');
+        } else {
+          list.innerHTML = '<li style="color:var(--text2)">No active scanners at this time.</li>';
+        }
+      } catch (e) {
+        document.getElementById('scanner-ips').innerHTML =
+          '<li style="color:var(--text2)">Unable to load scanner IPs. Contact abuse@meethuginn.com for current list.</li>';
+      }
+    })();
+  </script>
+</body>
+</html>

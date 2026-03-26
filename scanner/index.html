@@ -51,11 +51,11 @@
     <h2>Our Scanner IP Addresses</h2>
     <div class="card">
       <p style="font-size:0.8rem;margin-bottom:0.5rem;">These IP addresses are used for authorized scanning. You can whitelist or block them as appropriate for your network.</p>
-      <ul class="ip-list" id="scanner-ips">
-        <li style="color:var(--text2)">Loading...</li>
+      <ul class="ip-list">
+        <li>51.222.158.74 <span style="color:var(--text2);font-size:0.75rem;margin-left:0.5rem;">sensor-ca-02 &mdash; OVH Beauharnois, QC, Canada</span></li>
       </ul>
       <p style="font-size:0.75rem;color:var(--text2);margin:0.5rem 0 0;">
-        Machine-readable list: <code>GET /api/v1/scanner-ips</code>
+        Last updated: 2026-03-26. Contact <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a> for the most current list.
       </p>
     </div>
 
@@ -99,28 +99,5 @@
 
   </div>
 
-  <script>
-    // Fetch scanner IPs from the Huginn platform API.
-    // Update PLATFORM_URL to match your deployment.
-    const PLATFORM_URL = 'https://app.meethuginn.com';
-
-    (async function() {
-      try {
-        const resp = await fetch(PLATFORM_URL + '/api/v1/scanner-ips');
-        const data = await resp.json();
-        const list = document.getElementById('scanner-ips');
-        if (data.scanner_ips && data.scanner_ips.length > 0) {
-          list.innerHTML = data.scanner_ips
-            .map(function(ip) { return '<li>' + ip + '</li>'; })
-            .join('');
-        } else {
-          list.innerHTML = '<li style="color:var(--text2)">No active scanners at this time.</li>';
-        }
-      } catch (e) {
-        document.getElementById('scanner-ips').innerHTML =
-          '<li style="color:var(--text2)">Unable to load scanner IPs. Contact abuse@meethuginn.com for current list.</li>';
-      }
-    })();
-  </script>
 </body>
 </html>

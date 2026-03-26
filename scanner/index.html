@@ -62,24 +62,12 @@
     <h2>Opt Out</h2>
     <div class="opt-out-box">
       <p style="color:var(--text);margin-bottom:0.5rem;"><strong>We respect your right to opt out.</strong></p>
-      <p>If you do not wish your IP addresses or networks to be scanned, you can opt out using any of these methods:</p>
+      <p>If you do not wish your IP addresses or networks to be scanned, send an email to <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a> with:</p>
       <ul>
-        <li><strong>API:</strong> Submit a <code>POST</code> request to <code>/api/v1/optout</code> with your CIDR range (see example below)</li>
-        <li><strong>Email:</strong> Send your IP range(s) to <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a></li>
+        <li>The IP address(es) or CIDR range(s) you want excluded</li>
+        <li>Your name and organization</li>
       </ul>
-      <p>Opt-out requests are processed immediately. Your IP range will be excluded from all future scans.</p>
-    </div>
-
-    <h2>API Opt-Out Example</h2>
-    <div class="card">
-      <code style="display:block;white-space:pre;font-size:0.8rem;line-height:1.7;overflow-x:auto;">curl -X POST https://app.meethuginn.com/api/v1/optout \
-  -H "Content-Type: application/json" \
-  -d '{
-    "cidr": "203.0.113.0/24",
-    "email": "noc@example.com",
-    "organization": "Example Corp",
-    "reason": "Internal network"
-  }'</code>
+      <p>We process opt-out requests within 24 hours. Your IP range will be excluded from all future scans.</p>
     </div>
 
     <h2>Contact</h2>

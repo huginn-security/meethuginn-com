@@ -4,41 +4,166 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Huginn Security Scanner — Information &amp; Opt-Out</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #0f1117; --surface: #1a1d27; --border: #2a2d3a; --text: #e2e4e9; --text2: #9ca3af; --accent: #6366f1; }
+    :root {
+      --bg: #0b0d14;
+      --surface: #12151f;
+      --border: #1e2233;
+      --text: #e8eaf0;
+      --text2: #7c829a;
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --accent-bright: #818cf8;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+    body {
+      font-family: 'Bricolage Grotesque', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
     .container { max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem; }
-    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
-    h2 { font-size: 1.15rem; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--text); }
-    p, li { font-size: 0.9rem; color: var(--text2); margin-bottom: 0.75rem; }
-    a { color: var(--accent); text-decoration: none; }
+
+    /* --- Back link --- */
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text2);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      margin-bottom: 3rem;
+      transition: color 0.2s;
+    }
+    .back:hover { color: var(--text); }
+
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text2);
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 2.5rem 0 0.75rem;
+      color: var(--text);
+    }
+    p, li {
+      font-size: 0.9rem;
+      color: var(--text2);
+      margin-bottom: 0.75rem;
+    }
+    a { color: var(--accent-bright); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin: 1rem 0; }
-    .ip-list { list-style: none; padding: 0; }
-    .ip-list li { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem; padding: 0.35rem 0; color: var(--text); }
-    .opt-out-box { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 10px; padding: 1.25rem; margin: 1rem 0; }
+
     ul { padding-left: 1.25rem; }
-    code { background: var(--surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85rem; font-family: 'SF Mono', 'Fira Code', monospace; }
-    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text2); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+
+    .status-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text2);
+      flex-shrink: 0;
+    }
+    .status-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text2);
+      margin: 0;
+    }
+
+    .opt-out-box {
+      background: var(--accent-glow);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+    .opt-out-box p:first-child { color: var(--text); margin-bottom: 0.5rem; }
+
+    code {
+      background: var(--surface);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer p {
+      font-size: 0.75rem;
+      color: var(--text2);
+      margin: 0;
+    }
+    .footer a {
+      font-size: 0.75rem;
+      color: var(--text2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer a:hover { color: var(--text); }
+
+    @media (max-width: 480px) {
+      .container { padding: 2rem 1.25rem; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
 
-    <h1>Huginn Security Scanner</h1>
-    <p>If you arrived here because you observed network traffic from one of our IP addresses, this page explains who we are, what we do, and how to opt out.</p>
+    <a href="/" class="back">&larr; meethuginn.com</a>
+
+    <h1>Security Scanner</h1>
+    <p class="subtitle">If you arrived here because you observed network traffic from one of our IP addresses, this page explains who we are, what we do, and how to opt out.</p>
 
     <h2>Who We Are</h2>
-    <p><strong>Huginn</strong> is a security intelligence platform that monitors the internet for exposed services, misconfigurations, and vulnerabilities. We operate a distributed sensor network that performs lightweight, non-intrusive scans to build a database of internet-facing infrastructure.</p>
-    <p>Our scanning is similar to services like <a href="https://www.shodan.io" rel="nofollow">Shodan</a>, <a href="https://censys.io" rel="nofollow">Censys</a>, and <a href="https://www.shadowserver.org" rel="nofollow">Shadowserver</a>.</p>
+    <p><strong>Huginn</strong> is a security intelligence platform that monitors the internet for exposed services, misconfigurations, and vulnerabilities. We operate a distributed sensor network that performs lightweight, non-intrusive scans to build a comprehensive view of internet-facing infrastructure.</p>
 
     <h2>What We Scan</h2>
     <p>Our scanners perform the following activities:</p>
     <ul>
-      <li><strong>Port discovery</strong> &mdash; TCP SYN probes to identify open ports (no connection is established)</li>
-      <li><strong>Service identification</strong> &mdash; Standard HTTP/HTTPS connections to identify web technologies and TLS certificates</li>
-      <li><strong>DNS enumeration</strong> &mdash; Public DNS record lookups (A, AAAA, MX, TXT, NS, SOA)</li>
+      <li><strong>Port discovery</strong> &mdash; TCP SYN probes to identify open ports</li>
+      <li><strong>Service identification</strong> &mdash; Standard HTTP/HTTPS connections to identify web services and TLS certificates</li>
+      <li><strong>DNS enumeration</strong> &mdash; Public DNS record lookups</li>
     </ul>
     <p>We do <strong>not</strong> perform:</p>
     <ul>
@@ -48,20 +173,17 @@
       <li>Scanning of opted-out IP ranges</li>
     </ul>
 
-    <h2>Our Scanner IP Addresses</h2>
+    <h2>Active Scanners</h2>
     <div class="card">
-      <p style="font-size:0.8rem;margin-bottom:0.5rem;">These IP addresses are used for authorized scanning. You can whitelist or block them as appropriate for your network.</p>
-      <ul class="ip-list">
-        <li>51.222.158.74 <span style="color:var(--text2);font-size:0.75rem;margin-left:0.5rem;">sensor-ca-02 &mdash; OVH Beauharnois, QC, Canada</span></li>
-      </ul>
-      <p style="font-size:0.75rem;color:var(--text2);margin:0.5rem 0 0;">
-        Last updated: 2026-03-26. Contact <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a> for the most current list.
-      </p>
+      <div class="status-card">
+        <span class="status-dot"></span>
+        <p class="status-text">No active sensors at this time.</p>
+      </div>
     </div>
 
     <h2>Opt Out</h2>
     <div class="opt-out-box">
-      <p style="color:var(--text);margin-bottom:0.5rem;"><strong>We respect your right to opt out.</strong></p>
+      <p><strong>We respect your right to opt out.</strong></p>
       <p>If you do not wish your IP addresses or networks to be scanned, send an email to <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a> with:</p>
       <ul>
         <li>The IP address(es) or CIDR range(s) you want excluded</li>
@@ -74,18 +196,18 @@
     <p>For questions, concerns, or abuse reports:</p>
     <ul>
       <li><strong>Email:</strong> <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a></li>
-      <li><strong>Organization:</strong> Huginn Security Platform</li>
+      <li><strong>General inquiries:</strong> <a href="mailto:info@meethuginn.com">info@meethuginn.com</a></li>
     </ul>
 
     <h2>Legal Basis</h2>
-    <p>Our scanning activities consist of standard network probes (TCP SYN packets, HTTP/TLS connections, DNS queries) that do not access, modify, or exfiltrate data from target systems. These activities are equivalent to connecting to a publicly accessible service with a web browser.</p>
+    <p>Our scanning activities consist of standard network probes that do not access, modify, or exfiltrate data from target systems. These activities are equivalent to connecting to a publicly accessible service with a web browser.</p>
     <p>We comply with applicable laws and promptly honour all opt-out requests. If you believe our scanning has caused an issue, please contact us immediately at <a href="mailto:abuse@meethuginn.com">abuse@meethuginn.com</a>.</p>
 
     <div class="footer">
-      <p>&copy; 2026 Huginn Security Platform &mdash; <a href="https://meethuginn.com">meethuginn.com</a></p>
+      <p>&copy; 2026 Huginn</p>
+      <a href="/">Back to meethuginn.com</a>
     </div>
 
   </div>
-
 </body>
 </html>
